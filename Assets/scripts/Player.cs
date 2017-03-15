@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    public int Life = 10;
+    public float XP = 0;
+
     public float WalkSpeed = 6.0F;
     public float JumpSpeed = 8.0F;
     public float Gravity = 20.0F;
