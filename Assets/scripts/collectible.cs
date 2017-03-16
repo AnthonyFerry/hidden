@@ -2,61 +2,70 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class collectible : MonoBehaviour {
+public class Collectible : MonoBehaviour
+{
+    // On récupère une référence vers le player pour pouvoir modifier sa vie et/ou son xp
+    private Player _player;
 
-    //Variables (privé par défaut, si public, doit être déclaré)7
-    //Appelle player parce que besoin d'influer sur la vie du joueur dans la classe Player
-    public Player player; //Pour la rendre accessible dans l'éditeur, et en glissant le script associé, crée une référence
-
+    [Header("Collectible parameters")]
+    /// <summary>
+    /// Distance minimale à laquelle le joueur doit se trouver pour attirer la ressource.
+    /// </summary>
     public float StickDistance = 2f;
 
+    /// <summary>
+    /// Vitesse du collectible.
+    /// </summary>
     public float Speed = 2;
 
-    public bool SuitJoueur = false;
+    /// <summary>
+    /// "true" si le collectible est en train de suivre le joueur.
+    /// </summary>
+    public bool FollowsPlayer = false;
+    public RessourceData Ressource;
 
-    public TypeRessource type;
+    void Start()
+    {
+        var playerObject = FindObjectOfType<Player>();
+        _player = playerObject.GetComponent<Player>();
 
+        if (_player == null)
+            Debug.LogError("Aucun objet de type Player se trouve dans la scène");
 
-	// Use this for initialization
-	void Start () {
+        SetColorToRessourceType();
+    }
 
-        if (player == null)
+    // Update is called once per frame
+    void Update()
+    {
+        var playerPosition = _player.gameObject.transform.position;
+        var distanceFromPlayer = Vector3.Distance(playerPosition, transform.position);
+
+        if (distanceFromPlayer <= StickDistance)
+            FollowsPlayer = true;
+
+        if (FollowsPlayer == true)
         {
-            Debug.LogError("Oubli de script");
-        }
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        var playerpos = player.gameObject.transform.position;
-        
-        if (Vector3.Distance(playerpos, transform.position) <= StickDistance)
-        {
-            SuitJoueur = true;
-        }
+            // On fait regarder l'objet vers le joueur
+            transform.LookAt(playerPosition);
 
-        // ou SuitJoueur = Vector3.Distance(playerpos, transform.position) <= StickDistance
-
-        if (SuitJoueur == true)
-        {
-            transform.LookAt(playerpos);
+            // Et on le fait avancer
             transform.position += transform.forward * Time.deltaTime * Speed;
         }
-        
-	}
 
-    void OnTriggerEnter (Collider playercol)
+    }
+
+    void OnTriggerEnter(Collider playercol)
     {
-        if (playercol.gameObject.name == "player")
+        if (playercol.gameObject.name == "Player")
         {
-            switch (type)
+            switch (Ressource.Type)
             {
                 case TypeRessource.vie:
-                    player.Life++;
+                    _player.Life++;
                     break;
                 case TypeRessource.experience:
-                    player.XP++;
+                    _player.XP++;
                     break;
             }
 
@@ -64,7 +73,24 @@ public class collectible : MonoBehaviour {
         }
     }
 
-    
+    /// <summary>
+    /// Attribut la bonne couleur de lumière à l'objet. Rouge si vie, vert si experience.
+    /// </summary>
+    void SetColorToRessourceType()
+    {
+        // On récupère le composant "light" de l'objet
+        var light = GetComponent<Light>();
+
+        switch (Ressource.Type)
+        {
+            case TypeRessource.vie:
+                light.color = Color.red;
+                break;
+            case TypeRessource.experience:
+                light.color = Color.green;
+                break;
+        }
+    }
 }
 
 public enum TypeRessource
@@ -72,3 +98,10 @@ public enum TypeRessource
     vie,
     experience
 };
+
+[System.Serializable]
+public struct RessourceData
+{
+    public TypeRessource Type;
+    public int Quantity;
+}

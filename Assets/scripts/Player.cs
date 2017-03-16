@@ -28,12 +28,9 @@ public class Player : MonoBehaviour {
     private bool _isFlying = false;
     private bool _isFalling = false;
 
-    void Start()
-    {
-    }
-
     void FixedUpdate()
     {
+        // Si le joueur n'est pas en train de grimper, il est soumis à la gravité
         if (State != PlayerState.climbing)
             _verticalSpeed -= Gravity * Time.deltaTime;
         else
@@ -42,8 +39,10 @@ public class Player : MonoBehaviour {
 
     void Update()
     {
+        // Référence vers le composant CharacterController de l'objet
         CharacterController controller = GetComponent<CharacterController>();
 
+        // Si le joueur à touché le sol
         if (controller.isGrounded)
         {
             if (State == PlayerState.climbing)
@@ -112,6 +111,7 @@ public class Player : MonoBehaviour {
         transform.rotation = Quaternion.Euler(0, Camera.transform.localEulerAngles.y, 0);
     }
 
+    #region Triggers
     void OnTriggerEnter(Collider col)
     {
         if (col.tag == "ClimbWall")
@@ -135,6 +135,8 @@ public class Player : MonoBehaviour {
             State = PlayerState.standing;
         }
     }
+
+    #endregion
 }
 
 public enum PlayerState
