@@ -2,106 +2,78 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collectible : MonoBehaviour
-{
-    // On récupère une référence vers le player pour pouvoir modifier sa vie et/ou son xp
-    private Player _player;
+public class Collectible : MonoBehaviour {
 
-    [Header("Collectible parameters")]
-    /// <summary>
-    /// Distance minimale à laquelle le joueur doit se trouver pour attirer la ressource.
-    /// </summary>
-    public float StickDistance = 2f;
-
-    /// <summary>
-    /// Vitesse du collectible.
-    /// </summary>
+    public CollectibleType Type;
+    public int Value;
+    public float DistanceToTarget = 4;
     public float Speed = 2;
 
-    /// <summary>
-    /// "true" si le collectible est en train de suivre le joueur.
-    /// </summary>
-    public bool FollowsPlayer = false;
-    public RessourceData Ressource;
+    [Header("Resources colors")]
+    public Color LifeColor;
+    public Color ExperienceColor;
 
-    void Start()
-    {
-        var playerObject = FindObjectOfType<Player>();
-        _player = playerObject.GetComponent<Player>();
+    private GameObject _player;
+    private bool _hasTarget = false;
 
-        if (_player == null)
-            Debug.LogError("Aucun objet de type Player se trouve dans la scène");
+	// Use this for initialization
+	void Start () {
+        _player = FindObjectOfType<PlayerResources>().gameObject;
 
-        SetColorToRessourceType();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        var playerPosition = _player.gameObject.transform.position;
-        var distanceFromPlayer = Vector3.Distance(playerPosition, transform.position);
-
-        if (distanceFromPlayer <= StickDistance)
-            FollowsPlayer = true;
-
-        if (FollowsPlayer == true)
+        if (Type == CollectibleType.Life)
         {
-            // On fait regarder l'objet vers le joueur
-            transform.LookAt(playerPosition);
-
-            // Et on le fait avancer
-            transform.position += transform.forward * Time.deltaTime * Speed;
+            GetComponent<Light>().color = LifeColor;
+            GetComponent<SpriteRenderer>().color = LifeColor;
         }
-
-    }
-
-    void OnTriggerEnter(Collider playercol)
-    {
-        if (playercol.gameObject.name == "Player")
+        else if (Type == CollectibleType.Experience)
         {
-            switch (Ressource.Type)
+            GetComponent<Light>().color = ExperienceColor;
+            GetComponent<SpriteRenderer>().color = ExperienceColor;
+        }
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (Vector3.Distance(transform.position, _player.transform.position) <= DistanceToTarget)
+            _hasTarget = true;
+
+        if (_hasTarget)
+        {
+            GetComponent<Sine>().Enabled = false;
+
+            var direction = transform.TransformDirection(_player.transform.position - transform.position);
+            direction = Vector3.Normalize(direction);
+
+            transform.position += direction * Time.deltaTime * Speed;
+
+            Debug.DrawRay(transform.position, direction, Color.red);
+        }
+	}
+
+    void OnTriggerEnter(Collider obj)
+    {
+        PlayerResources player;
+
+        if (player = obj.GetComponent<PlayerResources>())
+        {
+            if (Type == CollectibleType.Life)
             {
-                case TypeRessource.vie:
-                    _player.Life++;
-                    break;
-                case TypeRessource.experience:
-                    _player.XP++;
-                    break;
+                player.AddLife(Value);
             }
+            else if (Type == CollectibleType.Experience)
+            {
+                player.AddExperience(Value);
+            }
+
+            player.DisplayStats();
 
             Destroy(gameObject);
         }
     }
-
-    /// <summary>
-    /// Attribut la bonne couleur de lumière à l'objet. Rouge si vie, vert si experience.
-    /// </summary>
-    void SetColorToRessourceType()
-    {
-        // On récupère le composant "light" de l'objet
-        var light = GetComponent<Light>();
-
-        switch (Ressource.Type)
-        {
-            case TypeRessource.vie:
-                light.color = Color.red;
-                break;
-            case TypeRessource.experience:
-                light.color = Color.green;
-                break;
-        }
-    }
 }
 
-public enum TypeRessource
+public enum CollectibleType
 {
-    vie,
-    experience
-};
-
-[System.Serializable]
-public struct RessourceData
-{
-    public TypeRessource Type;
-    public int Quantity;
+    Life,
+    Experience
 }
