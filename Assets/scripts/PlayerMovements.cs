@@ -4,58 +4,72 @@ using UnityEngine;
 
 public class PlayerMovements : MonoBehaviour {
 
-    public Transform Camera;
+    public float WalkSpeed = 10.0f;
+    public float Gravity = 9.0f;
+    public float JumpStrength = 100f;
 
-    public float Speed = 5;
-    public float Gravity = 9;
-    public float JumpStrength = 10;
+    public PlayerState State = PlayerState.walking;
 
+    private Transform _camera;
+    private Vector3 _camForward;
+    private Vector3 _move;
+    private bool _jump;
+    private CharacterController _controller;
     private float _verticalSpeed = 0.0f;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        Move();
-	}
+    void Start()
+    {
+        if (Camera.main != null)
+            _camera = Camera.main.transform;
+        else
+            Debug.LogWarning("Pas de camera trouvée");
+
+        _controller = GetComponent<CharacterController>();
+    }
 
     void FixedUpdate()
     {
-        _verticalSpeed -= Gravity * Time.deltaTime;
+        _verticalSpeed -= Gravity;
     }
 
-    void Move()
+    void Update()
     {
-        var horizontal = Input.GetAxis("horizontal");
-        var vertical = Input.GetAxis("vertical");
-        var characterController = GetComponent<CharacterController>();
+        if (_controller.isGrounded)
+        {
+            _verticalSpeed = 0;
+        }
 
-        
+        float horizontal = Input.GetAxis("horizontal");
+        float vertical = Input.GetAxis("vertical");
 
-        transform.forward = newForward;
-
-
-
-        /*
-        var localPosition = transform.localPosition;
-        var newX = localPosition.x + horizontal ;
-        var newY = localPosition.y;
-        var newZ = localPosition.z + vertical;
-
-        Vector3 direction = new Vector3(newX, newY, newZ);
-        
-
-        transform.LookAt(direction);
+        if (_camera != null)
+        {
+            _camForward = Vector3.Scale(_camera.forward, new Vector3(1, 0, 1)).normalized;
+            _move = vertical * _camForward + horizontal * _camera.right;
+        }
+        else
+        {
+            _move = vertical * Vector3.forward + horizontal * Vector3.right;
+        }
 
         if (Input.GetButtonDown("jump"))
-            _verticalSpeed = JumpStrength * Time.deltaTime;
-            
-        direction.y += _verticalSpeed;
-        
-        characterController.Move((direction - transform.position) * Time.deltaTime * Speed);
-        */
+            _verticalSpeed = JumpStrength;
+
+        Debug.DrawLine(transform.position, _move * 5 + transform.position);
+        transform.LookAt(_move + transform.position);
+
+        _move.y = _verticalSpeed * Time.deltaTime;
+
+        _controller.Move(_move * Time.deltaTime * WalkSpeed );
     }
+
+}
+
+public enum PlayerState
+{
+    walking,
+    climbing,
+    crouching,
+    flying,
+    aiming
 }
