@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CineCameraDoor : MonoBehaviour {
+public class CineCamera : MonoBehaviour {
 
     public GameObject _camera;
     public GameObject target;
@@ -38,9 +38,9 @@ public class CineCameraDoor : MonoBehaviour {
             _go = false;
 
             _camera.GetComponent<CameraOrbit>().enabled = true;
+            _camera.GetComponent<CameraOrbit>().distance = Vector3.Distance(FindObjectOfType<PlayerResources>().transform.position, _camera.transform.position);
 
-            _camera.GetComponent<CameraOrbit>().recenter = true;
-
+            
 
         }
     }

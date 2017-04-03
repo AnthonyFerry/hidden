@@ -63,6 +63,14 @@ public class PlayerMovements : MonoBehaviour {
         _controller.Move(_move * Time.deltaTime * WalkSpeed );
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.name == "Wall")
+        {
+            var newRotation = Quaternion.LookRotation(-hit.normal);
+            transform.rotation = newRotation;
+        }
+    }
 }
 
 public enum PlayerState

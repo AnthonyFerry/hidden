@@ -51,8 +51,10 @@ public class CameraOrbit : MonoBehaviour {
     public float VerticalSpeed = 2;
     public float HorizontalSpeed = 3;
 
-    [Header("Parameters")]
+    [Header("Recentering parameters")]
     public float TimeBeforeRecenter = 3.0f;
+    public float RecenterSpeedX = 3.0f;
+    public float RecenterSpeedY = 5.0f;
 
     public bool recenter { get { return _recenter; } set { _recenter = value; } }
 
@@ -62,6 +64,7 @@ public class CameraOrbit : MonoBehaviour {
     private float _maximumY = 50.0f;
 
     private float _distance = 10.0f; // Distance actuelle
+    public float distance { set { _distance = value; } get { return _distance; } }
     private float _newDistance = 10.0f; // Distance à atteindre
     private float _currentX = 0.0f;
     private float _currentY = 20.0f;
@@ -69,18 +72,20 @@ public class CameraOrbit : MonoBehaviour {
     // Use this for initialization
     void Start () {
         if (Target == null)
-            Debug.LogError("La camera doit être liée à une cible : Target");
+            Debug.LogError("A target must be link to this script");
 
         CameraTransform = transform;
 
-        if (CameraSettings == null)
+        if (CameraSettings != null)
+        {
+            var data = GetData("Walking");
+            SetCameraParameters(data);  
+        }
+        else
         {
             Debug.LogWarning("Camera settings has not been found");
             return;
         }
-
-        var data = GetData("Walking");
-        SetCameraParameters(data);
 	}
 
     void FixedUpdate()
@@ -98,7 +103,7 @@ public class CameraOrbit : MonoBehaviour {
         var controller = Target.GetComponentInParent<CharacterController>();
 
         if (_newDistance != _distance)
-            _distance = Mathf.Lerp(_distance, _newDistance, Time.deltaTime * 5);
+            _distance = Mathf.Lerp(_distance, _newDistance, Time.deltaTime);
 
         if (cameraX == 0 && cameraY == 0 && controller.velocity == Vector3.zero)
         {
@@ -115,8 +120,8 @@ public class CameraOrbit : MonoBehaviour {
 
         if (_recenter)
         {
-            _currentX = Mathf.LerpAngle(_currentX, Target.rotation.eulerAngles.y, Time.deltaTime * 3);
-            _currentY = Mathf.LerpAngle(_currentY, 20, Time.deltaTime * 5);
+            _currentX = Mathf.LerpAngle(_currentX, Target.rotation.eulerAngles.y, Time.deltaTime * RecenterSpeedX);
+            _currentY = Mathf.LerpAngle(_currentY, 20, Time.deltaTime * RecenterSpeedY);
         }
 
         _currentX += cameraX * HorizontalSpeed;
@@ -147,7 +152,7 @@ public class CameraOrbit : MonoBehaviour {
             if (setting.Name == settingName)
                 return setting;
 
-        return datas[1];
+        return datas[CameraSetting.WALKING];
     }
 
     void SetCameraParameters(CameraData data)
@@ -160,6 +165,6 @@ public class CameraOrbit : MonoBehaviour {
     public void ChangeCameraView(string settingName)
     {
         var data = GetData(settingName);
-        SetCameraParameters(data);        
+        SetCameraParameters(data);      
     }
 }
