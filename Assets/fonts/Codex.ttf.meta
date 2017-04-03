@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 7ba7a1dcdf4cb874bac2283ddb0619e4
+timeCreated: 1491254885
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Codex
+  fontNames:
+  - Codex
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 2
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
