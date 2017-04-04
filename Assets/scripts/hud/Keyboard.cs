@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class Keyboard : MonoBehaviour {
 
     private string _alphabetReference = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+    private int _wordlength;
+    private int _wordindex = 0;
+
     public GameObject Key;
     public Text UserAnswer;
     public Transform KeyHolder;
@@ -20,46 +23,99 @@ public class Keyboard : MonoBehaviour {
 
         for (int i = 0; i < _alphabetReference.Length; i++)
         {
-            var key = Instantiate(Key) as GameObject;
-            key.name = "Key " + _alphabetReference[i];
-            key.transform.SetParent(KeyHolder);
-
-            var buttonText = key.GetComponentInChildren<Text>();
-            buttonText.text = _alphabetReference[i].ToString();
-
-            key.GetComponent<Button>().onClick.AddListener(() => AddLetter(buttonText.text[0]));
+            var key = CreateKey("Key " + _alphabetReference[i], _alphabetReference[i].ToString());
 
             if (i == 0)
                 eventSystem.firstSelectedGameObject = key;
         }
 
-        var key2 = Instantiate(Key) as GameObject;
-        key2.name = "Key validate";
-        key2.transform.SetParent(KeyHolder);
+        var validateKey = CreateKey("Key validate", "-", Callback);
+        //validateKey.GetComponent<Text>().font = Resources.Load<Font>("Arial");
+        var returnKey = CreateKey("Key return", ":", RemoveLetter);
+        //returnKey.GetComponent<Text>().font = Resources.Load<Font>("Arial");
+    }
+    
+    GameObject CreateKey(string goName, string value)
+    {
+        var key = Instantiate(Key) as GameObject;
+        key.name = goName;
+        key.transform.SetParent(KeyHolder);
 
-        var buttonText2 = key2.GetComponentInChildren<Text>();
-        buttonText2.text = "-";
+        var buttonText = key.GetComponentInChildren<Text>();
+        buttonText.text = value;
 
-        key2.GetComponent<Button>().onClick.AddListener(() => Callback());
+        key.GetComponent<Button>().onClick.AddListener(() => AddLetter(value[0]));
+        return key;
+    }
+
+    GameObject CreateKey(string goName, string value, OnResolve callbackFunction)
+    {
+        var key = Instantiate(Key) as GameObject;
+        key.name = goName;
+        key.transform.SetParent(KeyHolder);
+
+        var buttonText = key.GetComponentInChildren<Text>();
+        buttonText.text = value;
+
+        key.GetComponent<Button>().onClick.AddListener(() => callbackFunction());
+        return key;
     }
 
     public void AddLetter(char letter)
     {
-        UserAnswer.text += letter;
+        var newtext = UserAnswer.text.ToCharArray();
+        newtext[_wordindex] = letter;
+       
+        _wordindex++;
+
+        _wordindex = Mathf.Clamp(_wordindex, 0, _wordlength-1); // évite le if, met des limites : l'utilisateur ne pourra pas dépasser le nombre de lettres maximum
+
+        Debug.Log(newtext.ToString());
+        UserAnswer.text = new string(newtext);
+        Debug.Log("index " + _wordindex);
     }
 
-    public void Call(OnResolve callbackFonction)
+    public void RemoveLetter()
+    {
+        var newtext = UserAnswer.text.ToCharArray();
+
+        if ((_wordindex == _wordlength-1) && (newtext[_wordindex] != '.'))
+        {
+            newtext[_wordindex] = '.';
+        }
+        else
+        {
+            _wordindex--;
+
+            _wordindex = Mathf.Clamp(_wordindex, 0, _wordlength - 1);
+            newtext[_wordindex] = '.';
+        }
+
+        UserAnswer.text = new string(newtext);
+        Debug.Log("index " + _wordindex);
+    }
+
+    public void Call(int wordlength, OnResolve callbackFonction)
     {
         Callback = callbackFonction;
         InitializeKeybord();
+        _wordlength = wordlength;
         Open();
     }
 
     void Open()
     {
+        UserAnswer.text = "";
+        _wordindex = 0;
+
         GameController.Instance.State = GameState.keyboard;
         UserAnswer.gameObject.SetActive(true);
         KeyHolder.gameObject.SetActive(true);
+
+        for (int i = 0; i<_wordlength; i++)
+        {
+            UserAnswer.text += ".";
+        }
     }
 
     public void Close()
@@ -68,11 +124,18 @@ public class Keyboard : MonoBehaviour {
         UserAnswer.gameObject.SetActive(false);
         KeyHolder.gameObject.SetActive(false);
 
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < KeyHolder.childCount; i++)
         {
-            Destroy(transform.GetChild(i).gameObject);
+            Destroy(KeyHolder.GetChild(i).gameObject);
         }
 
-        UserAnswer.text = "";
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("cancel"))
+        {
+            Close();
+        }
     }
 }

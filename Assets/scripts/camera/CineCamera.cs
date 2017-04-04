@@ -6,6 +6,7 @@ public class CineCamera : MonoBehaviour {
 
     public GameObject _camera;
     public GameObject target;
+    public bool IsActive = false;
 
     private bool _go;
 
@@ -15,7 +16,7 @@ public class CineCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (_go)
+		if (_go && IsActive)
         {
             _camera.GetComponent<CameraOrbit>().enabled = false;
             _camera.transform.position = Vector3.Lerp(_camera.transform.position, target.transform.position, Time.deltaTime * 5);

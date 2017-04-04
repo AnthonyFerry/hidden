@@ -69,6 +69,7 @@ public class MovingFloor : MonoBehaviour {
     public Transform Platform;
 
     public float Speed = 10;
+    public bool IsActive = false;
 
     /// <summary>
     /// Liste des points de destination
@@ -172,6 +173,11 @@ public class MovingFloor : MonoBehaviour {
     {
         if (DestinationPoints.Count < 2)
             return;
+
+        if (!IsActive)
+        {
+            return;
+        }
 
         var step = Time.deltaTime * Speed;
         var pos = Platform.position;
