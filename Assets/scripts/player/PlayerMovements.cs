@@ -29,6 +29,9 @@ public class PlayerMovements : MonoBehaviour {
 
     void FixedUpdate()
     {
+        //if (GameController.Instance.State != GameState.running)
+        //    return;
+
         if (Input.GetButton("jump") && _verticalSpeed < 0.1f)
             _verticalSpeed -= Gravity * Time.deltaTime;
         else
@@ -37,6 +40,9 @@ public class PlayerMovements : MonoBehaviour {
 
     void Update()
     {
+       // if (GameController.Instance.State != GameState.running)
+        //    return;
+
         float horizontal = Input.GetAxis("horizontal");
         float vertical = Input.GetAxis("vertical");
 

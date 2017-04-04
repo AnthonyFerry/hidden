@@ -23,4 +23,15 @@ public class TextualRiddle : MonoBehaviour {
     {
         Debug.Log(UserAnswer.text);
     }
+
+    public void ShowText()
+    {
+        Debug.LogError("Bitule Shnaek");
+        UIManager.Instance.KeyboardScript.Close();
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        UIManager.Instance.KeyboardScript.Call(() => ShowText());
+    }
 }

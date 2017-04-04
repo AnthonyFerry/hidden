@@ -67,5 +67,12 @@ public class Keyboard : MonoBehaviour {
         GameController.Instance.State = GameState.running;
         UserAnswer.gameObject.SetActive(false);
         KeyHolder.gameObject.SetActive(false);
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        UserAnswer.text = "";
     }
 }
