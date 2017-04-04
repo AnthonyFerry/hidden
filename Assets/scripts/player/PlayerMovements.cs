@@ -29,19 +29,25 @@ public class PlayerMovements : MonoBehaviour {
 
     void FixedUpdate()
     {
-        _verticalSpeed -= Gravity;
+        if (Input.GetButton("jump") && _verticalSpeed < 0.1f)
+            _verticalSpeed -= Gravity * Time.deltaTime;
+        else
+            _verticalSpeed -= Gravity;
     }
 
     void Update()
     {
-        if (_controller.isGrounded)
-        {
-            _verticalSpeed = 0;
-        }
-
         float horizontal = Input.GetAxis("horizontal");
         float vertical = Input.GetAxis("vertical");
 
+        // Si le joueur touche le sol, on remet sa vitesse verticale à zéro
+        if (_controller.isGrounded)
+            _verticalSpeed = 0;
+
+        if (Input.GetButtonDown("jump"))
+            Jump();
+
+        // On calcul l'angle de la caméra par rapport à la position du joueur afin d'adapter ses déplacement
         if (_camera != null)
         {
             _camForward = Vector3.Scale(_camera.forward, new Vector3(1, 0, 1)).normalized;
@@ -52,15 +58,17 @@ public class PlayerMovements : MonoBehaviour {
             _move = vertical * Vector3.forward + horizontal * Vector3.right;
         }
 
-        if (Input.GetButtonDown("jump"))
-            _verticalSpeed = JumpStrength;
-
-        Debug.DrawLine(transform.position, _move * 5 + transform.position);
         transform.LookAt(_move + transform.position);
 
+        // On applique le movement vertical
         _move.y = _verticalSpeed * Time.deltaTime;
 
         _controller.Move(_move * Time.deltaTime * WalkSpeed );
+    }
+
+    public void Jump(float strengthMultiplier = 1.0f)
+    {
+        _verticalSpeed = JumpStrength * strengthMultiplier;
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)

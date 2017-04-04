@@ -17,7 +17,7 @@ public class PlayerResources: MonoBehaviour {
 
     void Start()
     {
-        FindObjectOfType<GaugesManager>().InitializeGauges(MAX_LIFE, life, MAX_EXP, experience, level);
+        UIManager.Instance.GaugesManagerScript.InitializeGauges(MAX_LIFE, life, MAX_EXP, experience, level);
     }
 
     public void AddLife(int value = 1)
@@ -25,7 +25,7 @@ public class PlayerResources: MonoBehaviour {
         var newValue = _life + value;
         _life = (newValue > MAX_LIFE) ? MAX_LIFE : newValue;
 
-        FindObjectOfType<GaugesManager>().CalibrateLife(life);
+        UIManager.Instance.GaugesManagerScript.CalibrateLife(life);
     }
 
     public void SubstractLife(int value = 1)
@@ -33,7 +33,7 @@ public class PlayerResources: MonoBehaviour {
         var newValue = _life - value;
         _life = (newValue < 0) ? 0 : newValue;
 
-        FindObjectOfType<GaugesManager>().CalibrateLife(life);
+        UIManager.Instance.GaugesManagerScript.CalibrateLife(life);
     }
 
     public void AddExperience(int value = 1)
@@ -51,13 +51,13 @@ public class PlayerResources: MonoBehaviour {
             _exp = valueToAdd;
         }
 
-        FindObjectOfType<GaugesManager>().CalibrateExperience(experience);
+        UIManager.Instance.GaugesManagerScript.CalibrateExperience(experience);
     }
 
     public void AddLevel(int value = 1)
     {
         _level += value;
-        FindObjectOfType<GaugesManager>().CalibrateLevel(level);
+        UIManager.Instance.GaugesManagerScript.CalibrateLevel(level);
     }
 
     public void DisplayStats()

@@ -147,7 +147,7 @@ public class MovingFloor : MonoBehaviour {
     {
         DestinationPoints.Clear();
 
-        int pointCount = Container.GetChildCount();
+        int pointCount = Container.childCount;
 
         for (int i = 0; i < pointCount; i++)
             DestinationPoints.Add(Container.GetChild(i).gameObject);

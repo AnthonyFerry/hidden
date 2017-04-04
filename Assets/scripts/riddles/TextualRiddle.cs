@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TextualRiddle : MonoBehaviour {
     //Variables (publique commence par majuscule, privée commence par underscore)
     public string Answer;
-    public InputField UserAnswer;
+    public Text UserAnswer;
 
 
 	// Use this for initialization

@@ -1,21 +1,18 @@
 fileFormatVersion: 2
-guid: e94e5526451a05d4fb22dfd7061add9e
-timeCreated: 1490395293
+guid: 4181c979a74a3354697718e4fa78d5f2
+timeCreated: 1491293513
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: a_button
-    21300002: b_button
-    21300004: x_button
-    21300006: y_button
-    21300008: dpad
-    21300010: select_button
-    21300012: start_button
-    21300014: joystick
-    21300016: lt_button
-    21300018: rt_button
-    21300020: rb_button
-    21300022: lb_button
+    21300000: keyboard_key_center
+    21300002: keyboard_key_0
+    21300004: keyboard_key_1
+    21300006: keyboard_key_2
+    21300008: keyboard_key_3
+    21300010: keyboard_key_4
+    21300012: keyboard_key_5
+    21300014: keyboard_key_6
+    21300016: keyboard_key_7
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -42,11 +39,11 @@ TextureImporter:
     filterMode: -1
     aniso: -1
     mipBias: -1
-    wrapMode: 1
+    wrapMode: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -98,156 +95,117 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: a_button
+      name: keyboard_key_center
       rect:
         serializedVersion: 2
-        x: 0
-        y: 522
-        width: 256
-        height: 256
+        x: 9
+        y: 9
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: b_button
+      name: keyboard_key_0
       rect:
         serializedVersion: 2
-        x: 256
-        y: 522
-        width: 256
-        height: 256
+        x: 9
+        y: 109
+        width: 100
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: x_button
+      name: keyboard_key_1
       rect:
         serializedVersion: 2
-        x: 512
-        y: 522
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: y_button
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 522
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: dpad
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 266
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: select_button
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 266
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: start_button
-      rect:
-        serializedVersion: 2
-        x: 512
-        y: 266
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: joystick
-      rect:
-        serializedVersion: 2
-        x: 512
+        x: 9
         y: 0
-        width: 256
-        height: 266
+        width: 100
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: lt_button
+      name: keyboard_key_2
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 9
+        width: 9
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: keyboard_key_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 10
-        width: 128
-        height: 256
+        y: 9
+        width: 9
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: rt_button
+      name: keyboard_key_4
       rect:
         serializedVersion: 2
-        x: 128
-        y: 10
-        width: 128
-        height: 256
+        x: 0
+        y: 109
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: rb_button
+      name: keyboard_key_5
       rect:
         serializedVersion: 2
-        x: 256
-        y: 138
-        width: 256
-        height: 128
+        x: 109
+        y: 109
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: lb_button
+      name: keyboard_key_6
       rect:
         serializedVersion: 2
-        x: 256
-        y: 10
-        width: 256
-        height: 128
+        x: 109
+        y: 0
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: keyboard_key_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

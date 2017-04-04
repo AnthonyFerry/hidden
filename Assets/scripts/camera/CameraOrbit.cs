@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SwissArmyKnife;
 
 
 #if UNITY_EDITOR
@@ -42,7 +43,6 @@ public class CameraOrbitEditor : Editor
 
 public class CameraOrbit : MonoBehaviour {
 
-
     public Transform Target;
     public Transform CameraTransform;
     public CameraSetting CameraSettings;
@@ -57,6 +57,7 @@ public class CameraOrbit : MonoBehaviour {
     public float RecenterSpeedY = 5.0f;
 
     public bool recenter { get { return _recenter; } set { _recenter = value; } }
+    public float distance { set { _distance = value; } get { return _distance; } }
 
     private float _time = 0;
     private bool _recenter = false;
@@ -64,7 +65,6 @@ public class CameraOrbit : MonoBehaviour {
     private float _maximumY = 50.0f;
 
     private float _distance = 10.0f; // Distance actuelle
-    public float distance { set { _distance = value; } get { return _distance; } }
     private float _newDistance = 10.0f; // Distance à atteindre
     private float _currentX = 0.0f;
     private float _currentY = 20.0f;
@@ -90,12 +90,19 @@ public class CameraOrbit : MonoBehaviour {
 
     void FixedUpdate()
     {
+        if (GameController.Instance.State != GameState.running)
+            return; 
+
         if (Input.GetButtonDown("recenterCamera"))
             RecenterCamera();
     }
 
     // Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        if (GameController.Instance.State != GameState.running)
+            return;
+        
         float cameraX = Input.GetAxis("cameraX");
         float cameraY = Input.GetAxis("cameraY");
 
@@ -105,18 +112,21 @@ public class CameraOrbit : MonoBehaviour {
         if (_newDistance != _distance)
             _distance = Mathf.Lerp(_distance, _newDistance, Time.deltaTime);
 
+        // Si ni la caméra bouge ni le joueur on incrémente le timer
         if (cameraX == 0 && cameraY == 0 && controller.velocity == Vector3.zero)
         {
             _time += Time.deltaTime;
-        } 
+        }
         else
         {
             _time = 0;
             _recenter = false;
         }
 
+        // Si le temps qui s'est écoulé est supérieur ou égale à TimeBeforRecenter on recentre la caméra
         if (_time >= TimeBeforeRecenter)
             _recenter = true;
+
 
         if (_recenter)
         {
@@ -132,6 +142,9 @@ public class CameraOrbit : MonoBehaviour {
 
     void LateUpdate()
     {
+        if (GameController.Instance.State != GameState.running)
+            return;
+
         Vector3 direction = new Vector3(0, 0, -_distance);
         Quaternion rotation = Quaternion.Euler(_currentY, _currentX, 0);
         CameraTransform.position = Target.position + rotation * direction;

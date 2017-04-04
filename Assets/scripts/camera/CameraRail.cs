@@ -35,7 +35,7 @@ public class CameraRail : MonoBehaviour {
         if (hits.Length > 0)
         {
             // On récupère le point le plus proche du joueur grâce à la FoundTheNearestPoint.
-            Vector3 nearestPoint = FoundTheNearestPoint(hits, _player.position);
+            Vector3 nearestPoint = FindTheNearestPoint(hits, _player.position);
 
             // On lerp la position de la camera vers ce nouveau point
             _camera.position = nearestPoint;
@@ -48,7 +48,7 @@ public class CameraRail : MonoBehaviour {
 
     }
 
-    Vector3 FoundTheNearestPoint(RaycastHit[] hits, Vector3 position)
+    Vector3 FindTheNearestPoint(RaycastHit[] hits, Vector3 position)
     {
         Vector3 nearestPoint = hits[0].point ;
         foreach (var hit in hits) {
@@ -60,7 +60,7 @@ public class CameraRail : MonoBehaviour {
         return nearestPoint;
     }
 
-    Vector3 FoundTheNearestPoint(Vector3[] points, Vector3 position)
+    Vector3 FindTheNearestPoint(Vector3[] points, Vector3 position)
     {
         Vector3 nearestPoint = points[0];
         foreach (var point in points)
