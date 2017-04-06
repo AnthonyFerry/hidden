@@ -95,6 +95,11 @@ public class CameraOrbit : MonoBehaviour {
 
         if (Input.GetButtonDown("recenterCamera"))
             RecenterCamera();
+
+        if (Input.GetAxis("aim") > 0)
+            ChangeCameraView("Aiming");
+        else
+            ChangeCameraView("Walking");
     }
 
     // Update is called once per frame
@@ -110,7 +115,7 @@ public class CameraOrbit : MonoBehaviour {
         var controller = Target.GetComponentInParent<CharacterController>();
 
         if (_newDistance != _distance)
-            _distance = Mathf.Lerp(_distance, _newDistance, Time.deltaTime);
+            _distance = Mathf.Lerp(_distance, _newDistance, Time.deltaTime * 10);
 
         // Si ni la caméra bouge ni le joueur on incrémente le timer
         if (cameraX == 0 && cameraY == 0 && controller.velocity == Vector3.zero)

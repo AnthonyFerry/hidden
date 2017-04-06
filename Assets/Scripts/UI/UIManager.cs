@@ -7,6 +7,7 @@ public class UIManager : Singleton<UIManager> {
 
     public Keyboard KeyboardScript;
     public GaugesManager GaugesManagerScript;
+    public Hint HintScript;
 
 	// Use this for initialization
 	void Start () {

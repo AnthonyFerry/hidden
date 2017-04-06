@@ -16,6 +16,8 @@ public struct CameraData
 {
     public string Name;
     public float Distance;
+    public float HorizontalOffset;
+    public float VerticalOffset;
     public float VerticalMinConstraint;
     public float VerticalMaxConstraint;
 }

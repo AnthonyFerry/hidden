@@ -7,9 +7,13 @@ public class PlayerMovements : MonoBehaviour {
     public float WalkSpeed = 10.0f;
     public float Gravity = 9.0f;
     public float JumpStrength = 100f;
+    public int MaxJumpCount = 2;
+
+    private int _jumpCount = 0;
 
     public PlayerState State = PlayerState.walking;
 
+    public Door door;
     private Transform _camera;
     private Vector3 _camForward;
     private Vector3 _move;
@@ -48,10 +52,14 @@ public class PlayerMovements : MonoBehaviour {
 
         // Si le joueur touche le sol, on remet sa vitesse verticale à zéro
         if (_controller.isGrounded)
+        {
             _verticalSpeed = 0;
-
-        if (Input.GetButtonDown("jump"))
-            Jump();
+            _jumpCount = 0;
+        }
+            
+        if (State == PlayerState.walking)
+            if (Input.GetButtonDown("jump"))
+                Jump();
 
         // On calcul l'angle de la caméra par rapport à la position du joueur afin d'adapter ses déplacement
         if (_camera != null)
@@ -64,7 +72,9 @@ public class PlayerMovements : MonoBehaviour {
             _move = vertical * Vector3.forward + horizontal * Vector3.right;
         }
 
-        transform.LookAt(_move + transform.position);
+        if (State != PlayerState.climbing)
+            transform.LookAt(_move + transform.position);
+        
 
         // On applique le movement vertical
         _move.y = _verticalSpeed * Time.deltaTime;
@@ -74,7 +84,11 @@ public class PlayerMovements : MonoBehaviour {
 
     public void Jump(float strengthMultiplier = 1.0f)
     {
-        _verticalSpeed = JumpStrength * strengthMultiplier;
+        if (_jumpCount < MaxJumpCount)
+        {
+            _verticalSpeed = JumpStrength * strengthMultiplier;
+            _jumpCount++;
+        }
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)

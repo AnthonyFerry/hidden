@@ -8,7 +8,7 @@ public class TextualRiddle : MonoBehaviour {
     public string Answer;
     public Text UserAnswer;
     public bool OnTrigger = false;
-    public MovingFloor MV;
+    public TriggerableObject MV;
     public bool Resolved = false;
 
 
@@ -35,7 +35,9 @@ public class TextualRiddle : MonoBehaviour {
         {
             Resolved = true;
             UIManager.Instance.KeyboardScript.Close();
-            MV.IsActive = true;
+            GetComponent<CineCamera>().IsActive = false;
+            MV.Activate();
+            UIManager.Instance.HintScript.Hide();
         }
     }
 
@@ -54,6 +56,7 @@ public class TextualRiddle : MonoBehaviour {
         {
             Debug.Log("Appuyez sur X");
             OnTrigger = true;
+            UIManager.Instance.HintScript.Show("Appuyez sur $ pour activer l'énigme", Hint.X_BUTTON);
         }
     }
 
@@ -64,6 +67,7 @@ public class TextualRiddle : MonoBehaviour {
 
         if (col.gameObject.name == "Player")
         {
+            UIManager.Instance.HintScript.Hide();
             OnTrigger = false;
         }
     }

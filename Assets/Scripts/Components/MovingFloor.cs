@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -56,7 +57,7 @@ public class MovingFloorEditor : Editor
 
 #endif
 
-public class MovingFloor : MonoBehaviour {
+public class MovingFloor : TriggerableObject {
 
     /// <summary>
     /// GameObject contenant les points de destinations
@@ -69,7 +70,6 @@ public class MovingFloor : MonoBehaviour {
     public Transform Platform;
 
     public float Speed = 10;
-    public bool IsActive = false;
 
     /// <summary>
     /// Liste des points de destination
@@ -155,6 +155,11 @@ public class MovingFloor : MonoBehaviour {
     }
 
     #endregion
+
+    public override void Activate()
+    {
+        IsActive = true;
+    }
 
     void Start()
     {
