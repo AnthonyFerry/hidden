@@ -52,7 +52,7 @@ public class Switch : MonoBehaviour{
         var obj = col.gameObject;
         if (obj.name == "Player")
         {
-            UIManager.Instance.HintScript.Show("$", Hint.X_BUTTON);
+            UIManager.Instance.HintScript.Show("Appyuez sur $ pour ouvrir la porte", Hint.X_BUTTON);
             if (Input.GetButtonDown("interact"))
                 Toggle();
         }
